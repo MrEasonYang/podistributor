@@ -54,11 +54,15 @@ func StartServing() {
 	viper.SetDefault("listenPort", 17800)
 	viper.SetDefault("listenPath", "/")
 	viper.SetDefault("monitorPort", 11800)
+	viper.SetDefault("maxCacheEntrySize", 500)
+	viper.SetDefault("hardMaxCacheSize", 512)
 	maxDbIdleConns := viper.GetInt("maxDbIdleConns")
 	maxDbOpenConns := viper.GetInt("maxDbOpenConns")
 	listenPort := viper.GetInt("listenPort")
 	monitorPort := viper.GetInt("monitorPort")
 	listenPath = viper.GetString("listenPath")
+	maxCacheEntrySize := viper.GetInt("maxCacheEntrySize")
+	hardMaxCacheSize := viper.GetInt("hardMaxCacheSize")
 
 	log.Printf("decryptKey:%s, maxDbIdleConns:%d, maxDbOpenConns:%d, configLocation:%s, listenPort:%d, listenPath:%s, monitorPort:%d", 
 		decryptKey, maxDbIdleConns, maxDbOpenConns, configLocation, listenPort, listenPath, monitorPort)
@@ -98,9 +102,9 @@ func StartServing() {
 		LifeWindow: 60 * time.Minute,
 		CleanWindow: 3 * time.Second,
 		MaxEntriesInWindow: 1000 * 10 * 60,
-		MaxEntrySize: 500,
+		MaxEntrySize: maxCacheEntrySize,
 		Verbose: false,
-		HardMaxCacheSize: 512,
+		HardMaxCacheSize: hardMaxCacheSize,
 		OnRemove: nil,
 		OnRemoveWithReason: nil,
 	}
